@@ -62,10 +62,25 @@ public:
 		turnFact = 0.9;
 }
 
+	void DisabledInit() override
+{
+
+}
+
+
+	void DisabledPeriodic() override
+{
+		frc::Scheduler::GetInstance()->Run();
+
+}
+
+
 	void TeleopInit() override
 {
 		gyro->Reset();
 }
+
+
 
 	void TeleopPeriodic() override
 {
@@ -84,8 +99,10 @@ public:
 		{
 			rightFront->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, xInput);
 			rightBack->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, xInput);
+			rightMid->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, xInput);
 			leftFront->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, xInput);
 			leftBack->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, xInput);
+			leftMid->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, xInput);
 			gyro->Reset();
 		}
 
@@ -105,8 +122,10 @@ public:
 			std::cout << "Crosshair Left" << std::endl;
 			rightFront->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, slowDown);
 			rightBack->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, slowDown);
+			rightMid->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, slowDown);
 			leftFront->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, slowDown);
 			leftBack->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, slowDown);
+			leftMid->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, slowDown);
 			gyro->Reset();
 		}
 
@@ -115,8 +134,10 @@ public:
 			std::cout << "Crosshair Right" << std::endl;
 			rightFront->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -slowDown);
 			rightBack->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -slowDown);
+			rightMid->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -slowDown);
 			leftFront->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -slowDown);
 			leftBack->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -slowDown);
+			leftMid->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -slowDown);
 			gyro->Reset();
 		}
 		else
@@ -124,60 +145,54 @@ public:
 			std::cout << "Centered" << std::endl;
 			rightFront->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -0.3);
 			rightBack->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -0.3);
+			rightMid->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -0.3);
 			leftFront->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0.3);
 			leftBack->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0.3);
+			leftMid->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0.3);
 			gyro->Reset();
 
 		}
 
 	}
-		continue.....
+		else
+		{
+			if ((xInput < -0.01 || xInput > 0.01) && (yInput > 0.06 || yInput < -0.06))
+			{
+				rightFront->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, yInput + turnFact*(xInput));
+				rightBack->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, yInput + turnFact*(xInput));
+				rightMid->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, yInput + turnFact*(xInput));
+				leftMid->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -yInput + turnFact*(xInput));
+				leftFront->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -yInput + turnFact*(xInput));
+				leftBack->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -yInput + turnFact*(xInput));
+				gyro->Reset();
+			}
+
+			else if ((yInput > 0.06 || yInput < -0.06)) {
+				rightFront->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, yInput - correctionAngle);
+				rightBack->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, yInput - correctionAngle);
+				leftFront->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -yInput - correctionAngle);
+				leftBack->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -yInput - correctionAngle);
+
+			}
+
+			else {
+				//Dont spin any drive train motors if the driver is not doing anything
+				rightFront->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
+				rightBack->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
+				leftFront->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
+				leftBack->Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
+
+			}
+
+		}
+
+		lastSumAngle = sumAngle;
 
 
 }
 
 
 
-
-	Robot() {
-		m_robotDrive.SetExpiration(0.1);
-		m_timer.Start();
-	}
-
-	void AutonomousInit() override {
-		m_timer.Reset();
-		m_timer.Start();
-	}
-
-	void AutonomousPeriodic() override {
-		// Drive for 2 seconds
-		if (m_timer.Get() < 2.0) {
-			// Drive forwards half speed
-			m_robotDrive.ArcadeDrive(-0.5, 0.0);
-		} else {
-			// Stop robot
-			m_robotDrive.ArcadeDrive(0.0, 0.0);
-		}
-	}
-
-	void TeleopInit() override {}
-
-	void TeleopPeriodic() override {
-		// Drive with arcade style (use right stick)
-		m_robotDrive.ArcadeDrive(m_stick.GetY(), m_stick.GetX());
-	}
-
-	void TestPeriodic() override {}
-
-private:
-	// Robot drive system
-	frc::Spark m_left{0};
-	frc::Spark m_right{1};
-	frc::DifferentialDrive m_robotDrive{m_left, m_right};
-
-	frc::Joystick m_stick{0};
-	frc::LiveWindow& m_lw = *frc::LiveWindow::GetInstance();
-	frc::Timer m_timer;
 };
 
 START_ROBOT_CLASS(Robot)
