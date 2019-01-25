@@ -1,5 +1,6 @@
-#include <WPILib.h>
-#include <RobotDrive.h>
+#include "frc/WPILib.h"
+#include "frc/RobotDrive.h"
+#include "frc/Joystick.h"
 #include <Commands/Command.h>
 #include <Commands/Scheduler.h>
 #include <LiveWindow/LiveWindow.h>
@@ -19,10 +20,10 @@
 class Robot : public frc::IterativeRobot
 {
 //Declarations
-	RobotDrive *DriveTrain;
-	Joystick *JoyAccel, *RaceWheel;
-	PowerDistributionPanel *pdp;
-	ADXRS450_Gyro *gyro;
+	frc::RobotDrive *DriveTrain;
+	frc::Joystick *JoyAccel, *RaceWheel;
+	frc::PowerDistributionPanel *pdp;
+	frc::ADXRS450_Gyro *gyro;
 
 	std::shared_ptr<NetworkTable> table = NetworkTable::GetTable("limelight");
 
@@ -44,12 +45,12 @@ private:
 public:
 	void RobotInit() override
 {
-		pdp = new PowerDistributionPanel(0);
+		pdp = new frc::PowerDistributionPanel(0);
 
-		gyro = new ADXRS450_Gyro();
+		gyro = new frc::ADXRS450_Gyro();
 		gyro->Reset();
-		JoyAccel = new Joystick(0);
-		RaceWheel = new Joystick(1);
+		JoyAccel = new frc::Joystick(0);
+		RaceWheel = new frc::Joystick(1);
 
 		rightFront = new TalonSRX(1);
 		leftFront = new TalonSRX(15);
