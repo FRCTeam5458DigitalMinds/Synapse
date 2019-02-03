@@ -24,13 +24,13 @@
 #include <frc/drive/DifferentialDrive.h>
 
 // Left Side
-WPI_TalonSRX LeftFront{15};
-WPI_TalonSRX LeftMid{13};
-WPI_TalonSRX LeftBack{14};
+//WPI_TalonSRX LeftFront{15};
+//WPI_TalonSRX LeftMid{13};
+//WPI_TalonSRX LeftBack{14};
 
 // Right Side
-WPI_TalonSRX RightFront{1};
-WPI_TalonSRX RightMid{0};
+//WPI_TalonSRX RightFront{1};
+//WPI_TalonSRX RightMid{0};
 WPI_TalonSRX RightBack{2};
 
 
@@ -40,7 +40,7 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
   // Individual Motor Controller Tests
-  RightBack.Set(ControlMode::PercentOutput, .1);
+  RightBack.Set(ControlMode::PercentOutput, .5);
   }
 
 /**
