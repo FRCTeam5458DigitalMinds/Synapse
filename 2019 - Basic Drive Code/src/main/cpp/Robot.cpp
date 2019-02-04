@@ -37,7 +37,42 @@ frc::Joystick JoyAccel1{0}, RaceWheel{2};
 frc::ADXRS450_Gyro Gyro{};
 
 
+void Robot::RobotInit(){
+  m_chooser.SetDefaultOption(kAutoNameDefault,kAutoNameDefault);
+  m_chooser.AddOption(kAutoNameCustom,kAutoNameCustom);
+  frc::SmartDashboard::PutData("AutoModes",&m_chooser);
 
+  RightMotors.SetInverted(true);
+  LeftMotors.SetInverted(false);
+  
+  Gyro.Reset();
+}
+
+void Robot::RobotPeriodic() {}
+
+void Robot::AutonomousInit() {
+  m_autoSelected = m_chooser.GetSelected();
+  std::cout << "Auto selected: " << m_autoSelected << std::endl;
+  if (m_autoSelected == kAutoNameCustom) {
+  } else {
+  }
+}
+
+void Robot::AutonomousPeriodic() {
+  if (m_autoSelected == kAutoNameCustom) {
+  } else {
+  }
+}
+
+void Robot::TeleopInit() {}
+
+void Robot::TeleopPeriodic (){
+  double yInput = JoyAccel1.GetY();
+  double xInput = RaceWheel.GetX();
+  
+  DriveTrian.ArcadeDrive(-xInput,yInput);
+  
+}
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
