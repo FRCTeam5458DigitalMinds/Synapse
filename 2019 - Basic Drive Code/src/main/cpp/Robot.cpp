@@ -1,37 +1,42 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
-#include "Robot.h"
-
+#include <Robot.h>
 #include <iostream>
-
 #include <frc/smartdashboard/SmartDashboard.h>
-
 #include <ctre/Phoenix.h>
-
 #include <WPILib.h>
-
 #include <frc/Joystick.h>
-
 #include <TimedRobot.h>
-
 #include <frc/SpeedControllerGroup.h>
- 
 #include <frc/drive/DifferentialDrive.h>
+#include <WPILib.h>
+#include <frc/ADXRS450_Gyro.h>
+
+
+
 
 // Left Side
-//WPI_TalonSRX LeftFront{15};
-//WPI_TalonSRX LeftMid{13};
-//WPI_TalonSRX LeftBack{14};
+WPI_TalonSRX LeftFront{15};
+WPI_TalonSRX LeftMid{13};
+WPI_TalonSRX LeftBack{14};
 
 // Right Side
-//WPI_TalonSRX RightFront{1};
-//WPI_TalonSRX RightMid{0};
+WPI_TalonSRX RightFront{1};
+WPI_TalonSRX RightMid{0};
 WPI_TalonSRX RightBack{2};
+
+//Speed Controller Groups 
+frc::SpeedControllerGroup RightMotors{RightFront,RightMid, RightBack};
+frc::SpeedControllerGroup LeftMotors{LeftFront,LeftMid,LeftBack};
+
+//Drive Train
+frc::DifferentialDrive DriveTrian{RightMotors,LeftMotors};
+
+//Joystick's
+frc::Joystick JoyAccel1{0}, RaceWheel{2};
+
+//Gyro
+frc::ADXRS450_Gyro Gyro{};
+
+
 
 
 void Robot::RobotInit() {
