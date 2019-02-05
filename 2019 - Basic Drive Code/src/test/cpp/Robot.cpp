@@ -1,27 +1,12 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
-#include "Robot.h"
-
+#include <Robot.h>
 #include <iostream>
-
-#include <frc/smartdashboard/SmartDashboard.h>
-
-#include <ctre/Phoenix.h>
-
 #include <WPILib.h>
-
-#include <frc/Joystick.h>
-
 #include <TimedRobot.h>
-
+#include <ctre/Phoenix.h>
+#include <frc/Joystick.h>
 #include <frc/SpeedControllerGroup.h>
- 
 #include <frc/drive/DifferentialDrive.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 // Left Side
 WPI_TalonSRX LeftFront{15};
@@ -40,7 +25,18 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
   // Individual Motor Controller Tests
+  
+  //Right Motors
+  RightFront.Set(ControlMode::PercentOutput, .1);
+  RightMid.Set(ControlMode::PercentOutput, -.1);
   RightBack.Set(ControlMode::PercentOutput, .1);
+
+  //Left Motors
+  LeftFront.Set(ControlMode::PercentOutput, -.1);
+  LeftMid.Set(ControlMode::PercentOutput, .1);
+  LeftBack.Set(ControlMode::PercentOutput, -.1);
+
+
   }
 
 /**
