@@ -33,6 +33,13 @@ frc::Joystick JoyAccel1{0}, RaceWheel{2};
 //Gyro
 frc::ADXRS450_Gyro Gyro{};
 
+//Helps with driving
+float signed_square(float x){
+  return x * fabsf(x);
+}
+
+//straightens out the bot
+float LastSumAngle;
 
 void Robot::RobotInit(){
   m_chooser.SetDefaultOption(kAutoNameDefault,kAutoNameDefault);
@@ -72,11 +79,20 @@ void Robot::TeleopInit() {}
 
 
 void Robot::TeleopPeriodic (){
-  double yInput = JoyAccel1.GetY();
-  double xInput = RaceWheel.GetX();
-  
-  DriveTrian.ArcadeDrive(-xInput,yInput);
-  
+  double JoyY = JoyAccel1.GetY();
+  double WheelX = RaceWheel.GetX();
+
+ double SquaredWheelInput = signed_square(WheelX);
+
+  //Power gets cut from one side of the bot to make it straight
+  float SumAngle = Gyro.GetAngle();
+  float derivAngle = SumAngle - LastSumAngle;
+  float correctionAngle = (SumAngle*.1)+(derivAngle*.2);
+
+  //Straightens out the bot here when driving straight
+  LastSumAngle = SumAngle;
+
+
 }
 
 void Robot::TestPeriodic() {}
