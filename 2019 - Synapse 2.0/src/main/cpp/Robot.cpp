@@ -16,10 +16,10 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 
-// Declarations
+/* Declarations */
 
 
-//Digital Inputs / Electrical components 
+/* Digital Inputs / Electrical components */
 
 // PDP
 frc::PowerDistributionPanel pdp{0};
@@ -35,7 +35,7 @@ float turnFact = 0.9;
 frc::Joystick JoyAccel1{0}, Xbox{1}, RaceWheel{2};
 
 
-// Motors
+/* Motors */
 
 // Right Side Drive Motors
 // Right Side
@@ -48,6 +48,9 @@ WPI_TalonSRX LeftMid{13};
 WPI_TalonSRX LeftBack{14};
 
 bool beRunning = false;
+
+/* Intakes */
+
 
 
 void Robot::RobotInit() {
